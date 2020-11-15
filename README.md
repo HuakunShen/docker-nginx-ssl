@@ -8,7 +8,7 @@ Web App Deployment with docker, Nginx and SSL
 FROM ubuntu:18.04
 
 RUN apt update -y \
-    && apt install nginx curl vim -y \
+    && apt install nginx -y \
     && apt-get install software-properties-common -y \
     && add-apt-repository ppa:certbot/certbot -y \
     && apt-get update -y \
@@ -27,18 +27,16 @@ CMD ["nginx", "-g", "daemon off;"]
 ```
 server {
         listen 80 default_server;
+        listen [::]:80 default_server;
         root /var/www/html;
-        index index.html;
-
-        server_name our-story.huakunshen.com www.our-story.huakunshen.com;
-
+        index index.html index.htm index.nginx-debian.html;
+        server_name domain.com www.domain.com;
         location / {
             root /var/www/html;
             try_files $uri /index.html;
         }
-
         location /api/ {
-            proxy_pass http://backend/api/;
+            proxy_pass http://server/api/;
         }
 }
 ```
@@ -48,27 +46,27 @@ server {
 ```yaml
 version: '3.8'
 services:
-  backend:
+  server:
     image: node:12-alpine
     ports:
       - '8080:80'
     volumes:
       - ./server:/root/server
     env_file:
-      - server.env
+      - ./deploy/server.env
     entrypoint: sh /root/server/start_server.sh
   frontend:
     build:
-      context: .
+      context: ./deploy
       dockerfile: Dockerfile
     ports:
       - '80:80'
       - '443:443'
     volumes:
       - ./frontend/build:/var/www/html
-      - ./default.conf:/etc/nginx/sites-available/default
+      - ./deploy/default.conf:/etc/nginx/sites-available/default
     depends_on:
-      - 'backend'
+      - server
 ```
 
 ## Deploy and Setup SSL
