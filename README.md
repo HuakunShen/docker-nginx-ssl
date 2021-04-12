@@ -1,5 +1,7 @@
 # dockerize(nginx+ssl)
 
+Docker Hub Image: https://hub.docker.com/repository/docker/huakunshen/nginx-certbot
+
 Web App Deployment with docker, Nginx and SSL
 
 ## ubuntu+nginx+certbot - Dockerfile
@@ -68,6 +70,11 @@ services:
     depends_on:
       - server
 ```
+
+Add a volume to frontend if you want to keep **let's encrypt** configurations and certificates after update:
+- `./letsencrypt:/etc/letsencrypt`
+
+`./letsencrypt` will contain the data, you won't need to setup SSL again after restarting/recreating the containers.
 
 ## Deploy and Setup SSL
 
