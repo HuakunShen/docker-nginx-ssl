@@ -72,6 +72,7 @@ services:
 ```
 
 Add a volume to frontend if you want to keep **let's encrypt** configurations and certificates after update:
+
 - `./letsencrypt:/etc/letsencrypt`
 
 `./letsencrypt` will contain the data, you won't need to setup SSL again after restarting/recreating the containers.
@@ -82,4 +83,20 @@ Add a volume to frontend if you want to keep **let's encrypt** configurations an
 docker-compose up -d
 docker exec -it <frontend_container> bash       # bash into the nginx container
 certbot --nginx -d domain.com -d www.domain.com     # setup SSL certificate
+```
+
+## Get Certificate without port 80 with DNS Challenge
+
+If your server doesn't have port 80 and 443 open, the method above which uses http and https request for challenge
+won't work.
+
+```bash
+certbot certonly -a manual -d domain.com --preferred-challenges dns --staging
+```
+
+After obtaining the certificate, add the path to your server configuration file.
+
+```
+ssl_certificate xxx.crt;
+ssl_certificate_key xxx.key;
 ```
