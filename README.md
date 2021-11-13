@@ -24,6 +24,14 @@ STOPSIGNAL SIGTERM
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
+### Build with buildx
+
+```bash
+docker buildx build --push \
+    --platform linux/arm64,linux/amd64,linux/386,linux/arm/v7 \
+    -t huakunshen/nginx-certbot .
+```
+
 ## Nginx Configuration - default.conf
 
 ```
