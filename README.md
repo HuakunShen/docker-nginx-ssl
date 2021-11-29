@@ -99,7 +99,7 @@ If your server doesn't have port 80 and 443 open, the method above which uses ht
 won't work.
 
 ```bash
-certbot certonly -a manual -d domain.com --preferred-challenges dns --staging
+certbot certonly -a manual -d domain.com --preferred-challenges dns
 ```
 
 After obtaining the certificate, add the path to your server configuration file.
