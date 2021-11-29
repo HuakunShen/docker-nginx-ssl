@@ -95,7 +95,7 @@ certbot --nginx -d domain.com -d www.domain.com     # setup SSL certificate
 
 ## Get Certificate without port 80 with DNS Challenge
 
-If your server doesn't have port 80 and 443 open, the method above which uses http and https request for challenge
+If your server doesn't have port 80 open, the method above which uses http request for challenge
 won't work.
 
 ```bash
